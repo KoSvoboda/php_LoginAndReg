@@ -1,5 +1,5 @@
 <?php
-include_once "checkLogin.php";
+include_once "actions/checkLogin.php";
 ?>
 <!DOCTYPE html>
 <html>
@@ -7,10 +7,21 @@ include_once "checkLogin.php";
     <title>Main</title>
 </head>
 <body>
-<h1>Hello <?php echo $_SESSION['username']?></h1>
+<?php
+if ($isLog == false) {
+    include_once "forms/loginForm.php";
+    include_once "forms/regForm.php";
+}
+?>
+<?php
+if ($isLog == true) {
+    echo '<h1>Hello ' . $_SESSION['username'] . '</h1>';
+    echo '<a href="actions/logoutAction.php">Logout</a>';
+}
+?>
 
-<a href="actions/logoutAction.php">Logout</a>
 
-<?php include_once "footer.php"; ?>
+
+<?php include_once "includes/footer.php"; ?>
 </body>
 </html>

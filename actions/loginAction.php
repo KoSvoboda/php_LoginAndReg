@@ -1,5 +1,5 @@
 <?php
-$error = false;
+$logError = false;
 if(isset($_POST['login'])) {
     $username = $_POST['username'];
     $password = md5($_POST['password'].'DoNotHacks');
@@ -9,9 +9,9 @@ if(isset($_POST['login'])) {
             if ($user->password == $password) {
                 session_start();
                 $_SESSION['username'] = $username;
-                header('Location: index.php');
+                header('Location: http://localhost/manaoLogin/index.php');
                 die;
             }
     }
-    $error = true;
+    $logError = true;
 }

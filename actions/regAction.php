@@ -1,47 +1,45 @@
 <?php
-$errors = array();
-if(isset($_POST['login'])) {
+$regErrors = array();
+if(isset($_POST['register'])) {
     $username = $_POST['username'];
     $password = $_POST['password'];
     $c_password = $_POST['c_password'];
     $email = $_POST['email'];
     $name = $_POST['name'];
-    if(file_exists('/users' . $username . '.xml')) {
-        $errors[] = 'Username already exists';
+    $users = simplexml_load_file('users.xml');
+    foreach ($users->children() as $user) {
+        if ($user['username'] == $username) $regErrors[] = 'Username already exists';
     }
     if($username == '') {
-        $errors[] = 'Username is blank';
+        $regErrors[] = 'Username is blank';
     }
     if($email == '') {
-        $errors[] = 'Email is blank';
+        $regErrors[] = 'Email is blank';
     }
-    if($email == '') {
-        $errors[] = 'Email is blank';
+    foreach ($users->children() as $user) {
+        if ($user->email == $email) $regErrors[] = 'Email already busy';
+    }
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $regErrors[] = 'Not a valid email address';
     }
     if($name == '') {
-        $errors[] = 'Name is blank';
+        $regErrors[] = 'Name is blank';
     }
     if($password == '') {
-        $errors[] = 'Passwords are blank';
+        $regErrors[] = 'Passwords are blank';
     }
     if($password != $c_password) {
-        $errors[] = 'Passwords do not match';
+        $regErrors[] = 'Passwords do not match';
     }
-    if(count($errors) == 0) {
-        $xml = new SimpleXMLElement('<user></user>');
-        $xml->AddChild('password', md5($password.'DoNotHacks'));
-        $xml->AddChild('email', $email);
-        $xml->AddChild('name', $name);
-        $xml->asXml('users/' . $username . '.xml');
-        header('Location: login.php');
-        die;
+    if(count($regErrors) == 0) {
+        $users = simplexml_load_file('users.xml');
+        $user = $users->addChild('user');
+        $user->addAttribute('username', $username);
+        $user->addChild('password', md5($password.'DoNotHacks'));
+        $user->addChild('email', $email);
+        $user->addChild('name', $name);
+        $users->asXml('users.xml');
+        //header('Location: http://localhost/manaoLogin/login.php');
+        //die;
     }
-    if (count($errors) > 0) {
-        echo '<ul>';
-        foreach ($errors as $e) {
-            echo '<li>' . $e . '</li>';
-        }
-    }
-
 }
-?>
