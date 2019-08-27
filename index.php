@@ -1,9 +1,5 @@
 <?php
-session_start();
-if(!file_exists('users/' . $_SESSION['username'] . '.xml')) {
-    header('Location: login.php');
-    die;
-}
+include_once "checkLogin.php";
 ?>
 <!DOCTYPE html>
 <html>
@@ -13,8 +9,8 @@ if(!file_exists('users/' . $_SESSION['username'] . '.xml')) {
 <body>
 <h1>Hello <?php echo $_SESSION['username']?></h1>
 
-<a href="logout.php">Logout</a>
+<a href="actions/logoutAction.php">Logout</a>
 
-
+<?php include_once "footer.php"; ?>
 </body>
 </html>
