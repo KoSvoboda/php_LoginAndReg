@@ -1,20 +1,17 @@
 $(document).ready(function() {
 
-    $('[value = "Login"]').submit(function() {
-        if (document.form.name.value == '' || document.form.phone.value == '' ) {
-            valid = false;
-            return valid;
-        }
-        alert('OK');
+    $('#loginForm').submit(function() {
         $.ajax({
             type: "POST",
-            url: "regAction.php",
-            data: $(this).serialize()
-        }).done(function() {
-           // $('.js-overlay-thank-you').fadeIn();
-           // $(this).find('input').val('');
-           // $('#form').trigger('reset');
+            url: "actions/loginAction.php",
+            data: $(this).serialize(),
+            success: function (data) {
+                console.log(data);
+                var jsonData = JSON.parse(data);
+                console.log(jsonData.success);
+                $('.msg').html(jsonData.success);
+                $('#loginForm').fadeOut();
+            }
         });
-        return false;
     });
 });

@@ -8,6 +8,7 @@ include_once "actions/checkLogin.php";
 </head>
 <body>
 <?php
+var_dump($_SESSION);
 if ($isLog == false) {
     include_once "forms/loginForm.php";
     include_once "forms/regForm.php";

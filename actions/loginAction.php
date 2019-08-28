@@ -1,17 +1,16 @@
 <?php
-$logError = false;
-if(isset($_POST['login'])) {
-    $username = $_POST['username'];
-    $password = md5($_POST['password'].'DoNotHacks');
-    $users = simplexml_load_file('users.xml');
-    foreach ($users->children() as $user) {
-        if ($user['username'] == $username)
-            if ($user->password == $password) {
-                session_start();
-                $_SESSION['username'] = $username;
-                header('Location: http://localhost/manaoLogin/index.php');
-                die;
-            }
+$username = $_POST['username'];
+$password = md5($_POST['password'].'DoNotHacks');
+$users = simplexml_load_file('http://localhost/manaologin/users.xml');
+foreach ($users->children() as $user) {
+    if ($user['username'] == $username) {
+        if ($user->password == $password) {
+            session_start();
+            $_SESSION['username'] = $username;
+            echo json_encode(array('success' => 'Success'));
+            die;
+        }
+        else break;
     }
-    $logError = true;
 }
+echo json_encode(array('success' => 'Invalid username and/or password'));
